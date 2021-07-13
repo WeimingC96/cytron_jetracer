@@ -15,6 +15,6 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         rospy.init_node('image_sub')
         rospy.loginfo('image_sub node started')
-        rospy.Subscriber("/gi/simulation/left/image_raw", Image, process_image)
+        rospy.Subscriber("/motion_image", Image, process_image)
 
         rospy.spin()
