@@ -12,6 +12,9 @@ car.throttle_gain = 1
 car.steering = 0.0
 car.throttle = 0.0
 
+pub = rospy.Publisher('test_topic', Float32, queue_size=1)
+test = 1
+
 #Throttle
 def callback_throttle(throt):
     car.throttle = throt.data
@@ -28,7 +31,11 @@ def racecar():
     rospy.Subscriber("throttle", Float32, callback_throttle)
     rospy.Subscriber("steering", Float32, callback_steering)
 
-    rospy.spin()
+    #rospy.spin()
+    r = rospy.Rate(10)
+    while not rospy.is_shutdown():
+        pub.publish(test)
+        r.sleep()
 
 if __name__ == '__main__':
     print("Running racecar.py")

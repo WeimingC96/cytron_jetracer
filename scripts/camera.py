@@ -24,14 +24,14 @@ def gstreamer_pipeline(
     flip_method=0,
 ):
     return (
-        "nvarguscamerasrc ! "
-        "video/x-raw(memory:NVMM), "
-        "width=(int)%d, height=(int)%d, "
-        "format=(string)NV12, framerate=(fraction)%d/1 ! "
-        "nvvidconv flip-method=%d ! "
-        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
-        "videoconvert ! "
-        "video/x-raw, format=(string)BGR ! appsink"
+        "nvarguscamerasrc! \n"
+        "video/x-raw(memory:NVMM), \n"
+        "width=(int)%d, height=(int)%d, \n"
+        "format=(string)NV12, framerate=(fraction)%d/1! \n"
+        "nvvidconv flip-method=%d! \n"
+        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx! \n"
+        "videoconvert! \n"
+        "video/x-raw, format=(string)BGR ! appsink \n"
         % (
             capture_width,
             capture_height,
@@ -46,8 +46,9 @@ def gstreamer_pipeline(
 #Capture video frame
 def show_camera():
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
-    print(gstreamer_pipeline(flip_method=0))
-    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    print("flip method: ", gstreamer_pipeline(flip_method=0))
+    #cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
     if cap.isOpened():
         window_handle = cv2.namedWindow("CSI Camera", cv2.WINDOW_AUTOSIZE)
         # Window
@@ -80,4 +81,4 @@ def index():
 
 if __name__ == "__main__":
     show_camera()
-    app.run(host= 'localhost') #Host ip address
+    app.run(host= '192.168.1.87', debug=True, threaded=True) #Host ip address # was localhost

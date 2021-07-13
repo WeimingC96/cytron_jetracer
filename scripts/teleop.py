@@ -26,9 +26,9 @@ def teleop():
 
         #Throttle
         if key == 'w':
-            pub_throttle.publish(-1.0)
+            pub_throttle.publish(-.2)
         elif key == 's':
-            pub_throttle.publish(1.0)
+            pub_throttle.publish(.2)
         elif key == 'q':
             pub_throttle.publish(0.0)
 
