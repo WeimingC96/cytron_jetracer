@@ -166,6 +166,8 @@ catkin_install_python(PROGRAMS
   scripts/teleop_gamepad.py
   scripts/camera.py
   scripts/joint_state.py
+  scripts/camera_publisher.py
+  scripts/camera_subscriber.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
