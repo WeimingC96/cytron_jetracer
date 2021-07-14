@@ -2,11 +2,20 @@
 
 import cv2
 import numpy as np
+import rospy
+from cv_bridge import CvBridge, CvBridgeError
+from sensor_msgs.msg import Image
+
 
 # gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camera
 # Defaults to 1280x720 @ 60fps
 # Flip the image by setting the flip_method (most common values: 0 and 2)
 # display_width and display_height determine the size of the window on the screen
+
+image_pub = rospy.Publisher("image_topic", Image, queue_size=10)
+rospy.init_node('camera_image')
+r = rospy.Rate(10)
+bridge = CvBridge()
 
 # Gstreamer pipeline settings
 def gstreamer_pipeline(
@@ -51,19 +60,17 @@ def show_camera():
             print("window is handled")
             ret_val, img = cap.read()
             cv2.imshow("CSI Camera", img)
-            """ ret, buffer = cv2.imencode('.jpg', img)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-             """
             keyCode = cv2.waitKey(30) & 0xFF
             # Stop the program on the ESC key
             if keyCode == 27:
                 break
+        image_pub.publish(bridge.cv2_to_imgmsg(img, "bgr8"))
         cap.release()
         cv2.destroyAllWindows()
     else:
         print("Unable to open camera")
 
 if __name__ == "__main__":
-    show_camera()
+    while not rospy.is_shutdown():
+        show_camera()
+        r.sleep()
