@@ -51,11 +51,11 @@ def show_camera():
             print("window is handled")
             ret_val, img = cap.read()
             cv2.imshow("CSI Camera", img)
-            ret, buffer = cv2.imencode('.jpg', img)
+            """ ret, buffer = cv2.imencode('.jpg', img)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-            
+             """
             keyCode = cv2.waitKey(30) & 0xFF
             # Stop the program on the ESC key
             if keyCode == 27:
