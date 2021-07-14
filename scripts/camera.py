@@ -18,14 +18,14 @@ def gstreamer_pipeline(
     flip_method=0,
 ):
     return (
-        "nvarguscamerasrc! \n"
-        "video/x-raw(memory:NVMM), \n"
-        "width=(int)%d, height=(int)%d, \n"
-        "format=(string)NV12, framerate=(fraction)%d/1! \n"
-        "nvvidconv flip-method=%d! \n"
-        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx! \n"
-        "videoconvert! \n"
-        "video/x-raw, format=(string)BGR ! appsink \n"
+        "nvarguscamerasrc ! "
+        "video/x-raw(memory:NVMM), "
+        "width=(int)%d, height=(int)%d, "
+        "format=(string)NV12, framerate=(fraction)%d/1 ! "
+        "nvvidconv flip-method=%d ! "
+        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
+        "videoconvert ! "
+        "video/x-raw, format=(string)BGR ! appsink"
         % (
             capture_width,
             capture_height,
