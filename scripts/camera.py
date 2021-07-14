@@ -56,22 +56,22 @@ def show_camera():
     #cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
     if cap.isOpened():
         print("camera is opened")
-        # window_handle = cv2.namedWindow("CSI Camera", cv2.WINDOW_AUTOSIZE)
+        window_handle = cv2.namedWindow("CSI Camera", cv2.WINDOW_AUTOSIZE)
         # Window
-        # while cv2.getWindowProperty("CSI Camera", 0) >= 0:
-        ret_val, img = cap.read()
-            # cv2.imshow("CSI Camera", img)
-            # keyCode = cv2.waitKey(30) & 0xFF
+        while cv2.getWindowProperty("CSI Camera", 0) >= 0:
+            ret_val, img = cap.read()
+            cv2.imshow("CSI Camera", img)
+            keyCode = cv2.waitKey(30) & 0xFF
             # Stop the program on the ESC key
-            # if keyCode == 27:
-                # break
+            if keyCode == 27:
+                break
         image_pub.publish(bridge.cv2_to_imgmsg(img, "bgr8"))
-        # cap.release()
-        # cv2.destroyAllWindows()
+        cap.release()
+        cv2.destroyAllWindows()
     else:
         print("Unable to open camera")
 
 if __name__ == "__main__":
     while not rospy.is_shutdown():
         show_camera()
-        #r.sleep()
+        r.sleep()
