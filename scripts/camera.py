@@ -40,13 +40,15 @@ def gstreamer_pipeline(
 #Capture video frame
 def show_camera():
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
-    print("flip method: ", gstreamer_pipeline(flip_method=0))
+    print(gstreamer_pipeline(flip_method=0))
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
     #cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
     if cap.isOpened():
+        print("camera is opened")
         window_handle = cv2.namedWindow("CSI Camera", cv2.WINDOW_AUTOSIZE)
         # Window
         while cv2.getWindowProperty("CSI Camera", 0) >= 0:
+            print("window is handled")
             ret_val, img = cap.read()
             cv2.imshow("CSI Camera", img)
             ret, buffer = cv2.imencode('.jpg', img)
