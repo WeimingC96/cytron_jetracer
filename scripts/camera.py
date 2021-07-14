@@ -45,12 +45,14 @@ def gstreamer_pipeline(
         )
     )
 
+def cap_video():
+    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    return cap
 
 #Capture video frame
 def show_camera():
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
-    print(gstreamer_pipeline(flip_method=0))
-    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    cap = cap_video()
     #cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
     if cap.isOpened():
         print("camera is opened")
@@ -72,4 +74,4 @@ def show_camera():
 if __name__ == "__main__":
     while not rospy.is_shutdown():
         show_camera()
-        r.sleep()
+        #r.sleep()
