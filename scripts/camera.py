@@ -18,12 +18,12 @@ class Camera:
         self.image_pub = rospy.Publisher("image_topic", Image, queue_size=1)
         self.bridge = CvBridge()
         self.display = False
-        self.capture_width=600,
-        self.capture_height=400,
-        self.display_width=600,
-        self.display_height=400,
-        self.framerate=30,
-        self.flip_method=0,
+        self.capture_width=600
+        self.capture_height=400
+        self.display_width=600
+        self.display_height=400
+        self.framerate=30
+        self.flip_method=0
         
     # Gstreamer pipeline settings
     def gstreamer_pipeline(self):
@@ -42,7 +42,7 @@ class Camera:
                 self.framerate,
                 self.flip_method,
                 self.display_width,
-                self.display_height,
+                self.display_height
             )
         )
 
