@@ -17,18 +17,17 @@ class Camera:
     def __init__(self):
         self.image_pub = rospy.Publisher("image_topic", Image, queue_size=1)
         self.bridge = CvBridge()
+        self.capture_width=600,
+        self.capture_height=400,
+        self.display_width=600,
+        self.display_height=400,
+        self.framerate=30,
+        self.flip_method=0,
         self.display = False
         
 
     # Gstreamer pipeline settings
-    def gstreamer_pipeline(
-        capture_width=600,
-        capture_height=400,
-        display_width=600,
-        display_height=400,
-        framerate=30,
-        flip_method=0,
-    ):
+    def gstreamer_pipeline(self):
         return (
             "nvarguscamerasrc ! "
             "video/x-raw(memory:NVMM), "
@@ -39,12 +38,12 @@ class Camera:
             "videoconvert ! "
             "video/x-raw, format=(string)BGR ! appsink"
             % (
-                capture_width,
-                capture_height,
-                framerate,
-                flip_method,
-                display_width,
-                display_height,
+                self.capture_width,
+                self.capture_height,
+                self.framerate,
+                self.flip_method,
+                self.display_width,
+                self.display_height,
             )
         )
 
