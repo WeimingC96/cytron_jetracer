@@ -51,7 +51,7 @@ class Camera:
         # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
         cap = cv2.VideoCapture(self.gstreamer_pipeline(), cv2.CAP_GSTREAMER)
         #cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
-        if self.display:
+        if not self.display:
             if cap.isOpened():
                 print("camera is opened")
                 while True:
