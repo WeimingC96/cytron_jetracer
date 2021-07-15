@@ -87,7 +87,11 @@ def main():
         rate.sleep()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Shutting down")
+        cv2.destroyAllWindows()
     
     
         
