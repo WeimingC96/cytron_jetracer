@@ -3,8 +3,12 @@
 import cv2
 import numpy as np
 import rospy
+import gi
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
+
+gi.require_version('Gst', '1.0')
+from gi.repository import Gst, GObject
 
 
 # gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camera
@@ -15,7 +19,7 @@ from sensor_msgs.msg import Image
 class Camera:
     
     def __init__(self):
-        self.image_pub = rospy.Publisher("image_topic", Image, queue_size=1)
+        #self.image_pub = rospy.Publisher("image_topic", Image, queue_size=1)
         self.bridge = CvBridge()
         self.display = False
         self.capture_width=600
@@ -24,7 +28,29 @@ class Camera:
         self.display_height=400
         self.framerate=30
         self.flip_method=0
-        
+    
+    def gst_to_opencv(self, gst_buffer):
+        return np.ndarray((480,640,3), buffer=gst_buffer.extract_dup(0, gst_buffer.get_size()), dtype=np.uint8)
+
+    def gCamera(self):
+        image_pub = rospy.Publisher("image_topic", Image, queue_size=10)
+        rospy.init_node('camera_image', anonymous=True)
+        Gst.init(None)
+        pipe = Gst.parse_launch("""v4l2src device=/dev/video0 ! video/x-raw, width=640, height=480,format=(string)BGR ! appsink sync=false max-buffers=2 drop=true name=sink emit-signals=true""")
+        sink = pipe.get_by_name('sink')
+        pipe.set_state(Gst.State.PLAYING)
+        while not rospy.is_shutdown():
+            sample = sink.emit('pull-sample')
+            if (sample != None):
+                img = self.gst_to_opencv(sample.get_buffer())
+                try:
+                    image_pub.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
+                except CvBridgeError as e:
+                    print(e)
+            else:
+                print("sample is none!")
+
+
     # Gstreamer pipeline settings
     def gstreamer_pipeline(self):
         return (
@@ -53,16 +79,21 @@ class Camera:
         #cap = cv2.VideoCapture("v4l2src device=/dev/video0 ! videoconvert ! video/x-raw, format=BGR ! appsink", cv2.CAP_GSTREAMER)
         if not self.display:
             if cap.isOpened():
-                print("camera is opened")
-                while True:
-                    ret_val, img = cap.read()
-                    self.image_pub.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
+                image_pub = rospy.Publisher("image_topic", Image, queue_size=10)
+                rospy.init_node('camera_image', anonymous=True)
+                print("camera opened")
+                while not rospy.is_shutdown():
+                    try:
+                        ret_val, img = cap.read()
+                        self.image_pub.publish(self.bridge.cv2_to_imgmsg(img, "bgr8"))
+                    except CvBridgeError as e:
+                        print(e)
             else:
                 print("Unable to open camera")
 
         else:
             if cap.isOpened():
-                print("camera is opened")
+                print("camera opened")
                 window_handle = cv2.namedWindow("CSI Camera", cv2.WINDOW_AUTOSIZE)
                 # Window
                 while cv2.getWindowProperty("CSI Camera", 0) >= 0:
@@ -79,20 +110,15 @@ class Camera:
                 print("Unable to open camera")
 
 def main():
-    rospy.init_node('camera_image')
-    rate = rospy.Rate(100)
     cam = Camera()
     cam.show_camera()
-    while not rospy.is_shutdown():
-        rate.sleep()
 
 if __name__ == "__main__":
     try:
         main()
-    except KeyboardInterrupt:
+    except rospy.ROSInterruptException:
         print("Shutting down")
-        cv2.destroyAllWindows()
-    
+        pass
     
         
 
