@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <launch>
-    <include file="$(find ydlidar_ros_driver)/launch/X4.launch">
+    <include file="$(find ydlidar_ros_driver)/launch/X4.launch"/>
     <node name="camera_image" pkg="cytron_jetracer" type="camera.py"/>
 </launch>
