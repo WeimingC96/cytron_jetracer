@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import rospy
 import pygame
@@ -8,6 +8,7 @@ from std_msgs.msg import Float32
 #Initialize pygame and gamepad
 pygame.init()
 j = pygame.joystick.Joystick(0)
+print(pygame.joystick.get_count())
 j.init()
 print ('Initialized Joystick : %s' % j.get_name())
 
@@ -24,8 +25,9 @@ def teleop_gamepad():
         #Obtain gamepad values
         throttle = j.get_axis(1) #Left thumbstick Y
         steering = j.get_axis(2) #Right thumbstick X
-        print("Throttle:", throttle)
-        print("Steering:", steering)
+        #print("Throttle:", throttle)
+        #print("Steering:", steering)
+        print()
 
         #Pubblish gamepad values
         pub_throttle.publish(throttle)
