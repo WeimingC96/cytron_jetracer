@@ -8,13 +8,16 @@ from sensor_msgs.msg import Image, CompressedImage
 class Camera:
     def __init__(self):
         self.bridge = CvBridge()
-        self.image_sub = rospy.Subscriber("image_topic", CompressedImage, self.image_callback, queue_size = 100, buff_size=5000)
+        self.image_sub = rospy.Subscriber("image_topic", CompressedImage, self.image_callback, queue_size = 10)
+        self.raw_image_pub = rospy.Publisher("raw_image_topic", Image, queue_size = 10)
 
     def image_callback(self, msg):
         #print ("Processing frame | Delay:%6.3f" % (rospy.Time.now() - msg.header.stamp).to_sec())
         try:
             print("image converted")
             cv_image = self.bridge.compressed_imgmsg_to_cv2(msg, "bgr8")
+            ros_img = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
+            self.raw_image_pub.publish(ros_img)
         except CvBridgeError as e:
             print(e)
 

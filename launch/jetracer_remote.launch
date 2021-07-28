@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-    <include file="$(find cytron_jetracer)/launch/rviz.launch">
+    <include file="$(find cytron_jetracer)/launch/rviz.launch" />
     <node name="image_sub" pkg="cytron_jetracer" type="camera_subscriber.py"/>
+    <node name="teleop_gamepad" pkg="cytron_jetracer" type="teleop_gamepad.py"/>
 </launch>

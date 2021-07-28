@@ -25,9 +25,8 @@ def teleop_gamepad():
         #Obtain gamepad values
         throttle = j.get_axis(1) #Left thumbstick Y
         steering = j.get_axis(2) #Right thumbstick X
-        #print("Throttle:", throttle)
-        #print("Steering:", steering)
-        print()
+        print("Throttle:", throttle)
+        print("Steering:", steering)
 
         #Pubblish gamepad values
         pub_throttle.publish(throttle)
