@@ -20,8 +20,8 @@ class Camera:
         except CvBridgeError as e:
             print(e)
         
-        cv2.imshow("image", cv_image)
-        cv2.waitKey(3)
+        """ cv2.imshow("image", cv_image)
+        cv2.waitKey(3) """
 
 def main():
     rospy.init_node('image_sub', anonymous=True)

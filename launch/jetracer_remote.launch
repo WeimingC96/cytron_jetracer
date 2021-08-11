@@ -1,9 +1,28 @@
 <?xml version="1.0"?>
 
 <launch>
-    <include file="$(find cytron_jetracer)/launch/rviz.launch" />
-    <!--<include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch"/>
-    <include file="$(find gmapping)/launch/slam_gmapping_pr2.launch"/>-->
+
+    <arg name="mapping" value="1"/>
+
+    <!-- Image subsrciber -->
     <node name="image_sub" pkg="cytron_jetracer" type="camera_subscriber.py"/>
+
+    <!-- For remote controller -->
     <node name="teleop_gamepad" pkg="cytron_jetracer" type="teleop_gamepad.py"/>
+
+    <!-- Estimation of 2D odometry based on planar laser scans -->
+    <group if="$(arg mapping)">
+        <include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch">
+            <arg name="laser_scan_topic"     value="/scan"/>
+            <arg name="odom_topic"           value="/odom" />
+            <arg name="publish_tf"           value="true" />
+            <arg name="base_frame_id"        value="/base_footprint"/>
+            <arg name="odom_frame_id"        value="/odom" /> 
+            <arg name="init_pose_from_topic" value="" />
+            <arg name="freq"                 value="6.0"/>
+            <arg name="verbose"              value="true" />
+        </include>
+    </group>
+    
+    <include file="$(find cytron_jetracer)/launch/rviz.launch" />
 </launch>
