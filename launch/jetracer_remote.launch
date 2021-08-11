@@ -2,6 +2,8 @@
 
 <launch>
     <include file="$(find cytron_jetracer)/launch/rviz.launch" />
+    <!--<include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch"/>
+    <include file="$(find gmapping)/launch/slam_gmapping_pr2.launch"/>-->
     <node name="image_sub" pkg="cytron_jetracer" type="camera_subscriber.py"/>
     <node name="teleop_gamepad" pkg="cytron_jetracer" type="teleop_gamepad.py"/>
 </launch>

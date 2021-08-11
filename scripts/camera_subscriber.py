@@ -12,7 +12,6 @@ class Camera:
         self.raw_image_pub = rospy.Publisher("raw_image_topic", Image, queue_size = 10)
 
     def image_callback(self, msg):
-        #print ("Processing frame | Delay:%6.3f" % (rospy.Time.now() - msg.header.stamp).to_sec())
         try:
             print("image converted")
             cv_image = self.bridge.compressed_imgmsg_to_cv2(msg, "bgr8")
@@ -20,17 +19,13 @@ class Camera:
             self.raw_image_pub.publish(ros_img)
         except CvBridgeError as e:
             print(e)
-
-        """ (rows,cols,channels) = cv_image.shape
-        if cols > 60 and rows > 60:
-            cv2.circle(cv_image, (50,50), 10, 255) """
         
         cv2.imshow("image", cv_image)
         cv2.waitKey(3)
 
 def main():
-    cam = Camera()
     rospy.init_node('image_sub', anonymous=True)
+    cam = Camera()
     try:
         rospy.spin()
     except KeyboardInterrupt:

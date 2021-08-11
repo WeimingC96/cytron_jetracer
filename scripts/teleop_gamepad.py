@@ -23,8 +23,8 @@ def teleop_gamepad():
         pygame.event.pump()
         
         #Obtain gamepad values
-        throttle = j.get_axis(1) #Left thumbstick Y
-        steering = j.get_axis(2) #Right thumbstick X
+        throttle = -j.get_axis(1) #Left thumbstick Y
+        steering = -j.get_axis(2) #Right thumbstick X
         print("Throttle:", throttle)
         print("Steering:", steering)
 
