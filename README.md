@@ -13,7 +13,7 @@ Then clone this repository.
 ## YDLidar ROS Driver
 YDLidar ROS Driver depends on the YDLidar-SDK library, so you must first install the YDLidar-SDK library. It's better to have a new workspace for this library.
 - `cd ~/lidar_sdk_ws/src`
-- `git clone https://github.com/YDLIDAR/YDLidar-SDK.git'
+- `git clone https://github.com/YDLIDAR/YDLidar-SDK.git`
 - `cd YDLidar-SDK/build`
 - `cmake ..`
 - `make`
